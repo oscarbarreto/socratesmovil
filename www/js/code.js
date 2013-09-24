@@ -75,7 +75,7 @@ function dataRequest(data){
 };
 
 function insertHTML(data){
-	var html = cabecera+'<br><h2>'+data.name+'</h2><input type="hidden" name="numberQuestions" id="numberQuestions" value="' + data.questions.length +'"/><input type="hidden" name="position" id="position" value="0"/>';
+	var html = cabecera+'<h2>'+data.name+'</h2><input type="hidden" name="numberQuestions" id="numberQuestions" value="' + data.questions.length +'"/><input type="hidden" name="position" id="position" value="0"/>';
 		for(var i=0;i<data.questions.length;i++){
 			var aux = i==0?"block":"none";
 			html += '<div id="'+ i +'" style="display:'+ aux +'"><div><h3>'+data.questions[i].name +'</h3><p>' + data.questions[i].help + '</p></div><div data-role="fieldcontain" data-demo-html="true"><fieldset data-role="controlgroup">';

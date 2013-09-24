@@ -17,31 +17,24 @@
 </head>
 <body>
 	<div id="index" data-role="page" class="jqm-demos" data-quicklinks="true">
-		<div id="panel" data-role="panel" data-position="left" data-display="push">
-	   		<ul data-role="listview" data-theme="c" data-divider-theme="a" data-icon="false">
-        		<li data-role="list-divider"><a href="#" style="text-decoration:none;" data-rel="close">Opciones</a></li>
-        	    <li><a href="#" style="text-decoration:none;">Registrarse</a></li>
-            	<li><a href="#" style="text-decoration:none;">Informacion</a></li>
-        	</ul>
-        </div>
     	<div data-role="header" class="jqm-header">
-	        <h1 class="jqm-logo">Sócrates PUCP</h1>
-	        <a href="#panel" data-icon="grid" class="ui-btn-right" data-corners="false" data-iconpos="notext"> </a>
+	        <h1>Sócrates PUCP</h1>
+	        <a href="#popupMenu" data-transition="flip" data-position-to="origin" data-rel="popup" data-icon="grid" class="ui-btn-right" data-corners="false" data-iconpos="notext"> </a>
 		</div><!-- /header -->
 	    <div id="indexContent" data-role="content" class="jqm-content">
-	    <form name="myForm" id="myForm" method="POST" onSubmit="validacion()">
-	    	<div>
-	    		<label for="email">Correo PUCP:</label>
-				<input name="email" id="email" value="" type="text">
-			</div>
-			<div>
-	    		<label for="password">Contraseña:</label>
-				<input name="password" id="password" value="" type="password">
-			</div>
-			<div>
-				<input value="Ingresar" type="submit" data-theme="b">
-			</div>
-		</form>
+	    	<form name="myForm" id="myForm" method="POST" onSubmit="validacion()">
+	    		<div>
+	    			<label for="email">Correo PUCP:</label>
+					<input name="email" id="email" value="" type="text">
+				</div>
+				<div>
+		    		<label for="password">Contraseña:</label>
+					<input name="password" id="password" value="" type="password">
+				</div>
+				<div>
+					<input value="Ingresar" type="submit" data-theme="b">
+				</div>
+			</form>
 		</div><!-- content-->
 		<div data-role="footer" data-position="fixed">
 			<div data-role="navbar">
@@ -61,6 +54,13 @@
 					<input value="OK" type="submit" data-theme="b">
 				</div>
 			</form>
+		</div>
+		<div data-role="popup" id="popupMenu" data-theme="c" data-overlay-theme="a">
+        	<ul data-role="listview" data-inset="true" style="min-width:210px;" data-theme="c" data-divider-theme="a" data-icon="false">
+            	<li data-role="list-divider"><a href="#" style="text-decoration:none;" data-rel="back">Opciones</a></li>
+        		<li><a href="#" style="text-decoration:none;">Registrarse</a></li>
+            	<li><a href="#" style="text-decoration:none;">Informacion</a></li>
+        	</ul>
 		</div>
 	</div><!-- /page -->
 	<script type="text/javascript" charset="utf-8">
