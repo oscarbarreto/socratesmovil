@@ -52,10 +52,9 @@
 				<a href="#" data-role="button" data-inline="true" data-transition="flow" data-theme="b" data-mini="true" onClick="logoutSession();">Continuar</a>
 			</div>
 		</div>
-		<div data-role="popup" id="popupMenu" data-theme="c" data-overlay-theme="a">
-        	<ul data-role="listview" data-inset="true" style="min-width:210px;" data-theme="c" data-divider-theme="a" data-icon="false">
-            	<li data-role="list-divider"><a href="#" style="text-decoration:none;" data-rel="back">Opciones</a></li>
-        		<li><a href="#" style="text-decoration:none;">Registrarse</a></li>
+		<div data-role="popup" id="popupMenu" data-theme="c" data-corners="false">
+        	<ul data-role="listview" style="min-width:210px;" data-theme="c" data-icon="false">
+        		<li><a href="#" style="text-decoration:none;" onclick="loginSession()">Encuestas</a></li>
             	<li><a href="#popupDelete" data-transition="flip"  data-position-to="window" data-rel="popup" style="text-decoration:none;">Salir</a></li>
         	</ul>
 		</div>

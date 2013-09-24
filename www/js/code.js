@@ -4,6 +4,7 @@ var footer = '</div><div data-role="footer" data-position="fixed"><div id="navba
 function validacionCode(){
 	code = document.getElementById("code").value;
 	if( code == null || code.length == 0 || /^\s+$/.test(code) ) {
+		navigator.notification.alert('Eres el ganador!','','Notificacion','OK');
 		alert("El campo Codigo no puede estar vacio");
   		return false;
 	} else {
@@ -137,7 +138,6 @@ function sentData(){
 	var k = 0;
 	for(var i=0;i<parseInt(numberQuestions);i++){
 		var idQuestion = 'q' + i;
-		//var questionElement = document.getElementById(idQuestion).value;
 		alternativeElemnt = document.getElementsByName(i);
 		for (var j=0;j < alternativeElemnt.length;j++){
 			if(alternativeElemnt[j].checked){
