@@ -1,5 +1,5 @@
 var cabecera = '<div id="questionList" data-role="page" class="jqm-demos" data-quicklinks="true"><form name="myForm" id="myForm" method="POST" ><div data-role="header" data-position="fixed" class="jqm-header"><h1 class="jqm-logo">Sócrates PUCP</h1></div><div data-role="content" class="jqm-content" id="questions">';
-var footer = '</div><div data-role="footer" data-position="fixed"><div id="navbarFooter" data-role="navbar"><ul><li><a id="back" data-icon="arrow-l" class="ui-disabled"  data-iconpos="left" onClick="positionPage(false)">Atras</a></li><li><a id="next" data-icon="arrow-r " data-iconpos="right" class="ui-disabled" onClick="positionPage(true)">Siguiente</a></li></ul></div></div></form></div>';
+var footer = '</div><div data-role="footer" data-position="fixed"><div id="navbarFooter" data-role="navbar"><ul><li><a href="#questions" id="back" data-icon="arrow-l" class="ui-disabled"  data-iconpos="left" onClick="positionPage(false)">Atras</a></li><li><a href="#questions" id="next" data-icon="arrow-r " data-iconpos="right" class="ui-disabled" onClick="positionPage(true)">Siguiente</a></li></ul></div></div></form></div>';
 
 function validacionCode(){
 	code = document.getElementById("code").value;
