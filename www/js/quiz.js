@@ -29,7 +29,7 @@ function quizList(){
 function insertList(data){
 	var html = '<h2>Encuestas:</h2><ul data-role="listview" data-inset="true" class="ui-listview ui-listview-inset ui-corner-all ui-shadow">';
 	for(var i=0;i < data.length;i++){
-		html += '<li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="c" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-last-child ui-btn-up-c"><div class="ui-btn-inner ui-li"><div class="ui-btn-text"><a href="#" class="ui-link-inherit" onClick="quizData('+"'"+ data[i].code +"'"+ ');" style="text-decoration:none;"><h3 class="ui-li-heading">' + data[i].name + '</h3><p class="ui-li-desc">'+data[i].date+'</p></a></div><span class="ui-icon ui-icon-arrow-r ui-icon-shadow">&nbsp;</span></div></li>';
+		html += '<li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="c" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-last-child ui-btn-up-c"><div class="ui-btn-inner ui-li"><div class="ui-btn-text"><a href="#" class="ui-link-inherit" onClick="quizData('+ data[i].id +');" style="text-decoration:none;"><h3 class="ui-li-heading">' + data[i].name + '</h3><p class="ui-li-desc">'+data[i].date+'</p></a></div><span class="ui-icon ui-icon-arrow-r ui-icon-shadow">&nbsp;</span></div></li>';
 	};
 	html += '</ul>';
 	return html;
@@ -70,8 +70,9 @@ function questionList(data){
 	for(var i=0;i<data.questions.length;i++){
 		html += '<div><div><h3>'+data.questions[i].name +'</h3><p>' + data.questions[i].help + '</p></div><div data-role="fieldcontain">';
 		for (var j=0; j<data.questions[i].alternatives.length; j++){
+			//textAux =  data.questions[i].alternatives[j].correct ==1 ? " &#10004;":""
 			var x = j +1;
-			html += '<p>'+x+') ' + data.questions[i].alternatives[j].name+'</p>';
+			html += '<p>'+x+') ' + data.questions[i].alternatives[j].name+' </p>';
 		};
 		html += '</div><div data-role="fieldcontain">';
 		if ( data.questions[i].image.length>40 ){	

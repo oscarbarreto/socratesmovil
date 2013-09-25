@@ -5,7 +5,6 @@ function validacionCode(){
 	code = document.getElementById("code").value;
 	if( code == null || code.length == 0 || /^\s+$/.test(code) ) {
 		navigator.notification.alert('Eres el ganador!','','Notificacion','OK');
-		alert("El campo Codigo no puede estar vacio");
   		return false;
 	} else {
 		codeTag(code);
