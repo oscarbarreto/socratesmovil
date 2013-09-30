@@ -1,14 +1,13 @@
-var cabecera = '<div id="questionList" data-role="page" class="jqm-demos" data-quicklinks="true"><form name="myForm" id="myForm" method="POST" ><div data-role="header" data-position="fixed" class="jqm-header"><h1 class="jqm-logo">Sócrates PUCP</h1></div><div data-role="content" class="jqm-content" id="questions">';
-var footer = '</div><div data-role="footer" data-position="fixed"><div id="navbarFooter" data-role="navbar"><ul><li><a href="#questions" id="back" data-icon="arrow-l" class="ui-disabled"  data-iconpos="left" onClick="positionPage(false)">Atras</a></li><li><a href="#questions" id="next" data-icon="arrow-r " data-iconpos="right" class="ui-disabled" onClick="positionPage(true)">Siguiente</a></li></ul></div></div></form></div>';
+var cabecera = '<div id="questionList" data-role="page" class="jqm-demos" data-quicklinks="true"><form name="myForm" id="myForm" method="POST" ><div id="headerQ" data-role="header" data-position="fixed" class="jqm-header"><h1 class="jqm-logo">Sócrates PUCP</h1></div><div data-role="content" class="jqm-content" id="questions">';
+var footer = '</div><div data-role="footer" data-position="fixed"><div id="navbarFooter" data-role="navbar"><ul><li><a href="#questions" id="back" data-icon="arrow-l" class="ui-disabled"  data-iconpos="left" onClick="positionPage(false)">Atras</a></li><li><a href="#questions" id="next" data-icon="arrow-r " data-iconpos="right" class="ui-disabled" onClick="positionPage(true)">Siguiente</a></li></ul></div></div></form><div data-role="popup" id="alertQ" data-overlay-theme="a" data-theme="c" data-dismissible="false"><h3 class="ui-title">La encuesta no ha sido enviada, intentelo nuevamente</h3><a href="#" data-role="button" data-inline="true" data-theme="b" data-rel="back" data-mini="true" data-corners="false">Continuar</a></div></div>';
 
 function validacionCode(){
 	code = document.getElementById("code").value;
 	if( code == null || code.length == 0 || /^\s+$/.test(code) ) {
-		navigator.notification.alert('Eres el ganador!','','Notificacion','OK');
-  		return false;
+		$("#errorMesage").empty();
+		$("#errorMesage").html('El campo Codigo no puede estar');
 	} else {
 		codeTag(code);
-		return true;
 	}
 };
 
@@ -27,13 +26,14 @@ function codeQR(){
 					dataRequest(data);
         		},
 	    		error: function(){
-					alert('Intentelo nuevamente');
+	    			notificationAlert('#alertWindow', "#indexHeader", "flip", "#messageAlert", "Ocurrio un problema, intentelo nuevamente");
+					//alert('Intentelo nuevamente');
 	    		}
 			});
-      }, 
-      function (error) {
-          alert("No se pudo obetener código QR\n" + error);
-      });
+		}, 
+		function (error) {
+			notificationAlert('#alertWindow', "#indexHeader", "flip", "#messageAlert", "No se pudo obetener código QR");
+		});
 };
 
 
@@ -47,7 +47,9 @@ function codeTag(code){
 	    	dataRequest(data);
         },
 	    error: function(){
-		alert('Intentelo nuevamente');
+	    	document.getElementById("code").value = '';
+			$("#errorMesage").empty();
+			$("#errorMesage").html('Ocurrio un error,intentelo nuevamente');
 	    }
 		
    	});
@@ -69,8 +71,9 @@ function dataRequest(data){
 		$.mobile.hidePageLoadingMsg()
 		$.mobile.changePage( pagina );
 	} else {
-		alert('La encuesta no se encuentra disponible');
-	    window.location.replace("index.html");
+		document.getElementById("code").value = '';
+		$("#errorMesage").empty();
+		$("#errorMesage").html('La encuesta no esta disponible');
 	}
 };
 
@@ -78,7 +81,7 @@ function insertHTML(data){
 	var html = cabecera+'<h2>'+data.name+'</h2><input type="hidden" name="numberQuestions" id="numberQuestions" value="' + data.questions.length +'"/><input type="hidden" name="position" id="position" value="0"/>';
 		for(var i=0;i<data.questions.length;i++){
 			var aux = i==0?"block":"none";
-			html += '<div id="'+ i +'" style="display:'+ aux +'"><div><h3>'+data.questions[i].name +'</h3><p>' + data.questions[i].help + '</p></div><div data-role="fieldcontain" data-demo-html="true"><fieldset data-role="controlgroup">';
+			html += '<div id="'+ i +'" style="display:'+ aux +'"><div><h3>'+data.questions[i].name +'</h3><p>' + data.questions[i].help + '</p></div><div data-role="fieldcontain"><fieldset>';
 			var temp = data.questions[i].type=='0'?'radio':'checkbox';
 			for (var j=0; j<data.questions[i].alternatives.length; j++){
 				html += '<input type="'+ temp +'" name="'+ i +'" id="' + data.questions[i].alternatives[j].id + '" value="' + data.questions[i].alternatives[j].id + '" onclick="selectOption('+ i +');"><label for="' + data.questions[i].alternatives[j].id + '">' + data.questions[i].alternatives[j].name+'</label>';
@@ -152,25 +155,24 @@ function sentData(){
 	    dataType: 'json',
    	    data: {"idencuesta":idQuiz,"answers":idAlternative,"iduser":idUser},
 	    success: function(data){
+	    	alert(data.id);
 			if(data.id == '1'){
 	    		window.localStorage.removeItem("idquiz");
 	    		if (idUser=='0'){
 	    		window.localStorage.removeItem("iduser");
 	    		}
-	    		document.getElementById("code").value = '';
-	    		var temp = idUser=='0'?'index.html':'quizlist.html';
-	    		var html = '<br><h2>Ha terminado la encuesta</h2><div><a href="'+ temp +'" data-role="button">Regresar</a></div>';
+	    		if ($('#code').length) {
+ 					document.getElementById("code").value = '';
+				}
+	    		var html = '<br><h2>Ha terminado la encuesta</h2><div><a href="#" data-role="button" onclick="loginSession();">Regresar</a></div>';
 	    		$('#navbarFooter').empty();
 	    		$('#questions').html(html);
 	    	} else {
-	    		alert('La encuesta no ha sido enviada, intentelo nuevamente');
+	    		notificationAlert('#alertQ','#headerQ', 'flip');
 	    	}	
-			/*pagina.appendTo( $.mobile.pageContainer );
-			$.mobile.hidePageLoadingMsg()
-			$.mobile.changePage( pagina );*/
 	    },
 	    error: function(){
-			alert('La encuesta no ha sido envienda intentelo nuevamente');
+	    	notificationAlert('#alertQ','#headerQ', 'flip');
 	    }
 	});
 };
@@ -189,3 +191,50 @@ function selectOption(data){
 	nextButton.className = textClass;
 };
 
+function notificationAlert(idN,positionN,transitionN,messageAlertN, messageN){
+	$(idN).popup({ positionTo: positionN });
+	$(idN).popup({ transition: transitionN });
+	if (messageAlertN != '' && messageAlertN != null){
+		$(messageAlertN).empty();
+		$(messageAlertN).html(messageN);
+	}
+	$(idN).popup("open");
+};
+
+function questionList(data){
+	var activateStatus =  parseInt(data[0].status) ==2?"block":"none";
+	var stopStatus = parseInt(data[0].status) ==1?"block":"none";
+	var fecha =  new Date(data[0].date*1000);
+	var mes = parseInt(fecha.getMonth())+1;
+	var dia = fecha.getDate()+"/" + mes.toString()+"/"+ fecha.getFullYear();
+	var html = cabecera +'<div><div data-role="controlgroup" data-type="horizontal" class="ui-li-aside"><a href="#" id="activeQuiz" style="display:'+ activateStatus +'" data-role="button" onclick="statusChange('+ data[0].id +', true);" data-mini="true">Activar</a><a href="#" id="stopQuiz" style="display:'+ stopStatus +'" data-role="button" onclick="statusChange('+ data[0].id +',false);" data-mini="true">Terminar</a></div><div><h2>'+data[0].name+'</h2><p>'+dia+'</p>';
+	if (data[0].questions.length>0){
+		for(var i=0;i<data[0].questions.length;i++){
+			var x = 97;
+			html += '<div><div data-role="collapsible"><h3>'+data[0].questions[i].name +'</h3><p>' + data[0].questions[i].help + '</p><div data-role="fieldcontain">';
+			for (var j=0; j<data[0].questions[i].alternatives.length; j++){
+				textAux =  data[0].questions[i].alternatives[j].correct ==1 ? " &#10004;":""
+				html += '<p>'+ String.fromCharCode(x)+') ' + data[0].questions[i].alternatives[j].name+'  <span style="color:#3ADF00;">'+textAux+' </span></p>';
+				x++;
+			};
+			html += '</div><div data-role="fieldcontain">';
+			if ( data[0].questions[i].image.length>40 ){	
+				html += '<img width="100%" src="' + data[0].questions[i].image + '">';
+			};
+			html += '</div></div>';
+		};
+	} else {
+		html += '<div><h3>La encuesta no tiene preguntas</h3><a href="#" data-role="button" onclick="loginSession();">Ir a encuestas</a></div>';
+	}
+	html+= footer;
+	return html;
+};
+
+function statusChange(idQuiz, actionQ){
+	var styleActivate = actionQ?"none":"block";
+	var styleStop = !actionQ?"none":"block";
+	stopQuiz = document.getElementById("stopQuiz");
+	stopQuiz.style.display = styleStop;
+	startQuiz = document.getElementById("activeQuiz");
+	startQuiz.style.display = styleActivate;
+};

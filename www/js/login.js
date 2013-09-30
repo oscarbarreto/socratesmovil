@@ -2,20 +2,29 @@ function validacion(){
 	$.mobile.allowCrossDomainPages = true;
 	email = document.getElementById("email").value;
 	password = document.getElementById("password").value;
+	var temp = true
 	if( email == null || email.length == 0 || /^\s+$/.test(email) ) {
-		alert("El campo Correo PUCP no puede estar vacío");
-  		return false;
-	} else if( password == null || password.length == 0 || /^\s+$/.test(password) ) {
-  		alert("El campo Contraseña no puede estar vacío");
-  		return false;
+		$("#emailError").empty();
+		$("#emailError").html('El campo Correo PUCP no puede estar vacío');
+		temp = false;
 	} else if( !(/\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+/).test(email) ) {
-  		alert("No es un correo válido");
-  		return false;
-	} else { 
-		idUserTag(email,password);
-		return true;
+  		$("#emailError").empty();
+		$("#emailError").html('No es un correo válido');
+		temp = false;
+	} else {
+		$("#emailError").empty();
 	}
-};
+	if( password == null || password.length == 0 || /^\s+$/.test(password) ) {
+  		$("#passwordError").empty();
+		$("#passwordError").html('El campo Contraseña no puede estar vacío');
+		temp =  false;
+	} else {
+		$("#passwordError").empty();
+	}
+	if (temp){ 
+		idUserTag(email,password);
+	}
+}; 
 
 
 function idUserTag(email,password){
@@ -33,11 +42,11 @@ function idUserTag(email,password){
 	    		window.localStorage.setItem("email",data.email);
 	    		window.location.replace("quizlist.html");
 		    } else {
-	    		alert('El campo Correo PUCP o Contraseña es incorrecto');
+		    	notificationAlert('#alertWindow', "#indexHeader", "flip", "#messageAlert", "El campo Correo PUCP o Contraseña es incorrecto");
 	    	}
         },
 	    error: function(){
-		alert('El campo Correo PUCP o Contraseña es incorrecto');
+	    	notificationAlert('#alertWindow', "#indexHeader", "flip", "#messageAlert", "El campo Correo PUCP o Contraseña es incorrecto");
 	    }
 		
    	});
@@ -49,7 +58,7 @@ function loginSession(){
  		var idUser = window.localStorage.getItem('iduser');
  		 if(idUser != null && idUser != 0){
  			window.location.replace("quizlist.html");
- 		}
+ 		} 
  	} else {
  		var db = window.openDatabase('Socrates', '1.0', 'Socrates', 200000);
  	}
