@@ -60,7 +60,7 @@ function loginSession(){
  			window.location.replace("quizlist.html");
  		} 
  	} else {
- 		var db = window.openDatabase('Socrates', '1.0', 'Socrates', 200000);
+ 		window.openDatabase('Socrates', '1.0', 'Socrates', 200000);
  	}
 };
 
@@ -79,7 +79,7 @@ function logoutSession(){
 */
 function checkLocalStorageSupport() {
 	try {
-		return 'localStorage' in window && window['localStorage'] != null;
+		return 'Socrates' in window && window['Socrates'] != null;
 	} catch (e) {
 		return false;
 	}

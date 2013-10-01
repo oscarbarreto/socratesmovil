@@ -1,11 +1,13 @@
-var cabecera = '<div id="questionList" data-role="page" class="jqm-demos" data-quicklinks="true"><form name="myForm" id="myForm" method="POST" ><div id="headerQ" data-role="header" data-position="fixed" class="jqm-header"><h1 class="jqm-logo">Sócrates PUCP</h1> <a href="#" data-position-to="origin" data-rel="popup" data-icon="back" class="ui-btn-right" data-corners="false" data-iconpos="notext" onclick="loginSession();"> </a></div><div data-role="content" class="jqm-content" id="questions">';
+var cabecera = '<div id="questionList" data-role="page" class="jqm-demos" data-quicklinks="true"><form name="myForm" id="myForm" method="POST" ><div id="indexHeader" data-role="header" data-position="fixed" class="jqm-header"><h1 class="jqm-logo">Sócrates PUCP</h1> <a href="#" data-position-to="origin" data-rel="popup" data-icon="back" class="ui-btn-right" data-corners="false" data-iconpos="notext" onclick="loginSession();"> </a></div><div data-role="content" class="jqm-content" id="questions"><div style="color:#FF0000;"><h2 id="errorQ"></h2></div>';
 var footer = '</div><div data-role="footer" data-position="fixed"><div id="navbarFooter" data-role="navbar"><ul><li><a href="#questions" id="back" data-icon="arrow-l" class="ui-disabled"  data-iconpos="left" onClick="positionPage(false)">Atras</a></li><li><a href="#questions" id="next" data-icon="arrow-r " data-iconpos="right" class="ui-disabled" onClick="positionPage(true)">Siguiente</a></li></ul></div></div></form><div data-role="popup" id="alertQ" data-overlay-theme="a" data-theme="c" data-dismissible="false"><h3 class="ui-title">La encuesta no ha sido enviada, intentelo nuevamente</h3><a href="#" data-role="button" data-inline="true" data-theme="b" data-rel="back" data-mini="true" data-corners="false">Continuar</a></div></div>';
 
-function validacionCode(){
+function validacionCode(idError){
+	var errorAlert = (idError!=null && idError !="")?idError:"#errorMesage";
 	code = document.getElementById("code").value;
 	if( code == null || code.length == 0 || /^\s+$/.test(code) ) {
-		$("#errorMesage").empty();
-		$("#errorMesage").html('El campo Codigo no puede estar');
+		$(errorAlert).empty();
+		$(errorAlert).html('El campo Codigo no puede estar');
+		notificationAlert('#alertWindow', "window", "flip", "#messageAlert", "No se pudo obetener código QR");
 	} else {
 		codeTag(code);
 	}
@@ -26,13 +28,13 @@ function codeQR(){
 					dataRequest(data);
         		},
 	    		error: function(){
-	    			notificationAlert('#alertWindow', "#indexHeader", "flip", "#messageAlert", "Ocurrio un problema, intentelo nuevamente");
+	    			notificationAlert('#alertWindow', "window", "flip", "#messageAlert", "Ocurrio un problema, intentelo nuevamente");
 					//alert('Intentelo nuevamente');
 	    		}
 			});
 		}, 
 		function (error) {
-			notificationAlert('#alertWindow', "#indexHeader", "flip", "#messageAlert", "No se pudo obetener código QR");
+			notificationAlert('#alertWindow', "window", "flip", "#messageAlert", "No se pudo obetener código QR");
 		});
 };
 
@@ -226,7 +228,8 @@ function questionList(data){
 	} else {
 		html += '<div><h3>La encuesta no tiene preguntas</h3><a href="#" data-role="button" onclick="loginSession();">Ir a encuestas</a></div>';
 	}
-	html+= footer;
+	var footer2 = '</div><div data-role="footer" data-position="fixed"><div data-role="navbar"><ul><li><a href="#" class="ui-btn-active" onClick="codeQR();">QR</a></li><li><a href="#positionWindow" data-transition="flip"  data-position-to="#headerQ" data-rel="popup">Codigo</a></li></ul></div></div></form><div data-role="popup" id="positionWindow" data-theme="e" data-overlay-theme="a" class="ui-content"><form name="codeForm" id="codeForm" method="POST"><div><label for="code">Ingrese Codigo:</label><input name="code" id="code" value="" type="text" data-corners="false"></div><div><a href="#" data-role="button" data-theme="b" onclick="validacionCode('+"'#errorQ'"+');" data-rel="back">Continuar</a></div></form></div><div id="alertWindow" data-role="popup" data-overlay-theme="a" data-theme="e" data-dismissible="false" class="ui-content"><h4 id="messageAlert"></h4><a href="#" data-role="button" data-inline="true" data-theme="b" data-rel="back" data-corners="false" style="text-align:center;">Continuar</a></div></div>';
+	html+= footer2;
 	return html;
 };
 

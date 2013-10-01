@@ -50,7 +50,8 @@ function quizData(id){
    	    data: {"idquiz":id},
 	    success: function(data){
 	    	var html = questionList(data);
-	    	var pagina = $( html );	
+	    	var pagina = $( html );
+	    	$("#alertWindow").remove();
 			pagina.appendTo( $.mobile.pageContainer );
 			$.mobile.hidePageLoadingMsg()
 			$.mobile.changePage( pagina );
