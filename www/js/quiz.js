@@ -52,6 +52,7 @@ function quizData(id){
 	    	var html = questionList(data);
 	    	var pagina = $( html );
 	    	$("#alertWindow").remove();
+	    	$("#footer").remove();
 			pagina.appendTo( $.mobile.pageContainer );
 			$.mobile.hidePageLoadingMsg()
 			$.mobile.changePage( pagina );

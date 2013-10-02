@@ -79,7 +79,7 @@ function logoutSession(){
 */
 function checkLocalStorageSupport() {
 	try {
-		return 'Socrates' in window && window['Socrates'] != null;
+		return 'localStorage' in window && window['localStorage'] != null;
 	} catch (e) {
 		return false;
 	}

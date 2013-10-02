@@ -6,15 +6,15 @@ function validacionCode(idError){
 	code = document.getElementById("code").value;
 	if( code == null || code.length == 0 || /^\s+$/.test(code) ) {
 		$(errorAlert).empty();
-		$(errorAlert).html('El campo Codigo no puede estar');
-		notificationAlert('#alertWindow', "window", "flip", "#messageAlert", "No se pudo obetener código QR");
+		$(errorAlert).html('El campo Codigo no puede estar vacio');
 	} else {
 		codeTag(code);
 	}
 };
 
-function codeQR(){
+function codeQR(idError){
 	var scanner = window.plugins.barcodeScanner;
+	var errorAlert = (idError!=null && idError !="")?idError:"#alertWindow";
    	scanner.scan(
 		function (result) {
 			var x = result.text.lastIndexOf('/')
@@ -204,8 +204,8 @@ function notificationAlert(idN,positionN,transitionN,messageAlertN, messageN){
 };
 
 function questionList(data){
-	var activateStatus =  parseInt(data[0].status) ==2?"block":"none";
-	var stopStatus = parseInt(data[0].status) ==1?"block":"none";
+	var activateStatus =  parseInt(data[0].status) ==1?"block":"none";
+	var stopStatus = parseInt(data[0].status) ==2?"block":"none";
 	var fecha =  new Date(data[0].date*1000);
 	var mes = parseInt(fecha.getMonth())+1;
 	var dia = fecha.getDate()+"/" + mes.toString()+"/"+ fecha.getFullYear();
@@ -228,16 +228,36 @@ function questionList(data){
 	} else {
 		html += '<div><h3>La encuesta no tiene preguntas</h3><a href="#" data-role="button" onclick="loginSession();">Ir a encuestas</a></div>';
 	}
-	var footer2 = '</div><div data-role="footer" data-position="fixed"><div data-role="navbar"><ul><li><a href="#" class="ui-btn-active" onClick="codeQR();">QR</a></li><li><a href="#positionWindow" data-transition="flip"  data-position-to="#headerQ" data-rel="popup">Codigo</a></li></ul></div></div></form><div data-role="popup" id="positionWindow" data-theme="e" data-overlay-theme="a" class="ui-content"><form name="codeForm" id="codeForm" method="POST"><div><label for="code">Ingrese Codigo:</label><input name="code" id="code" value="" type="text" data-corners="false"></div><div><a href="#" data-role="button" data-theme="b" onclick="validacionCode('+"'#errorQ'"+');" data-rel="back">Continuar</a></div></form></div><div id="alertWindow" data-role="popup" data-overlay-theme="a" data-theme="e" data-dismissible="false" class="ui-content"><h4 id="messageAlert"></h4><a href="#" data-role="button" data-inline="true" data-theme="b" data-rel="back" data-corners="false" style="text-align:center;">Continuar</a></div></div>';
+	var footer2 = '</div><div data-role="footer" data-position="fixed"><div data-role="navbar"><ul><li><a href="#" class="ui-btn-active" onClick="codeQR('+"'#alertQuiz'"+');">QR</a></li><li><a href="#positionWindow" data-transition="flip"  data-position-to="#headerQ" data-rel="popup">Codigo</a></li></ul></div></div></form><div data-role="popup" id="positionWindow" data-theme="e" data-overlay-theme="a" class="ui-content"><form name="codeForm" id="codeForm" method="POST"><div><label for="code">Ingrese Codigo:</label><input name="code" id="code" value="" type="text" data-corners="false"></div><div><a href="#" data-role="button" data-theme="b" onclick="validacionCode('+"'#errorQ'"+');" data-rel="back">Continuar</a></div></form></div><div id="alertQuiz" data-role="popup" data-overlay-theme="a" data-theme="e" data-dismissible="false" class="ui-content"><h4 id="messageAlert"></h4><a href="#" data-role="button" data-inline="true" data-theme="b" data-rel="back" data-corners="false" style="text-align:center;">Continuar</a></div></div>';
 	html+= footer2;
 	return html;
 };
 
 function statusChange(idQuiz, actionQ){
 	var styleActivate = actionQ?"none":"block";
+	var status = actionQ?"1":"2";
 	var styleStop = !actionQ?"none":"block";
-	stopQuiz = document.getElementById("stopQuiz");
-	stopQuiz.style.display = styleStop;
-	startQuiz = document.getElementById("activeQuiz");
-	startQuiz.style.display = styleActivate;
+	$.ajax({
+	    url: "http://192.168.190.166/socratesprueba/mobile/status?callback=?",
+   	    type: "GET",
+	    dataType: 'json',
+   	    data: {"idencuesta":idQuiz,"status":status},
+	    success: function(data){
+	    	alert(data.id);
+			if(data.id == '1'){
+				stopQuiz = document.getElementById("stopQuiz");
+				stopQuiz.style.display = styleStop;
+				startQuiz = document.getElementById("activeQuiz");
+				startQuiz.style.display = styleActivate;
+	    	} else {
+	    		$(errorAlert).empty();
+				$(errorAlert).html('El campo Codigo no puede estar vacio');
+	    	}	
+	    },
+	    error: function(){
+	    	$(errorAlert).empty();
+			$(errorAlert).html('El campo Codigo no puede estar vacio');
+	    }
+	});
+	
 };
